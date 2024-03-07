@@ -1,6 +1,5 @@
 "use client";
 
-import { IUser } from "@/models/user.model";
 import {
   Dispatch,
   PropsWithChildren,
@@ -8,6 +7,9 @@ import {
   createContext,
   useContext,
 } from "react";
+
+import { IUser } from "@/models/user.model";
+
 
 export type UserListCtxDataTypes = {
   selectedUser: IUser | null;
@@ -38,4 +40,38 @@ export const UserListCtxProvider = (props: UserListCtxProviderProps) => {
 
 export const useUserListCtx = () => {
   return useContext(userListCtx);
+};
+
+export const useUserListCtxActions = () => {
+  const ctx = useContext(userListCtx);
+
+  function selectUserAction(user: IUser) {
+    ctx.setData((prev) => ({
+      ...prev,
+      prevUser: prev.selectedUser,
+      selectedUser: user,
+    }));
+  }
+
+  function clearSelectedUserAction() {
+    ctx.setData((prev) => ({
+      ...prev,
+      prevUser: prev.selectedUser,
+      selectedUser: null,
+    }));
+  }
+
+  function clearAction() {
+    ctx.setData((prev) => ({
+      ...prev,
+      prevUser: null,
+      selectedUser: null,
+    }));
+  }
+
+  return {
+    selectUserAction,
+    clearSelectedUserAction,
+    clearAction,
+  };
 };

@@ -7,7 +7,6 @@ export default function Home() {
       <UserList />
       <UserList />
       <UserList />
-      <UserList />
     </main>
   );
 }

@@ -1,16 +1,17 @@
 import { IUser } from "@/models/user.model";
-import { useUserListCtx } from "../context/user-list-ctx";
+import {
+  useUsersCtxActions,
+  useUsersCtxState,
+} from "../context/user-list-ctx-with-reducer";
 
 interface IUserListItemProps {
   user: IUser;
 }
 
 export const UserListItem = (props: IUserListItemProps) => {
-  const {
-    data: { prevUser, selectedUser },
-    setData,
-    fromParent: { secretInfo },
-  } = useUserListCtx();
+  const { selectedUser, prevUser } = useUsersCtxState();
+  const { selectUserAction } = useUsersCtxActions();
+
   return (
     <li
       style={{
@@ -22,14 +23,10 @@ export const UserListItem = (props: IUserListItemProps) => {
             : "black",
       }}
       onClick={() => {
-        setData((prev) => ({
-          ...prev,
-          prevUser: selectedUser,
-          selectedUser: props.user,
-        }));
+        selectUserAction(props.user);
       }}
     >
-      {props.user.id} - {props.user.name} - {secretInfo}
+      {props.user.id} - {props.user.name}
     </li>
   );
 };
